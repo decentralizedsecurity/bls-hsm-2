@@ -8,6 +8,15 @@ When importing a static library (containing the blst functions) there is a probl
 If you do a build of the application (mycli), no problem is shown. In order to reproduce the error, lines 48, 49, 50 and 51 of secure_partition/CMakeLists.txt must be uncommented.
 https://github.com/Pablosanserr/tfm-test/blob/ea84b72612f2c8083fd846f718df5f58887fca76/secure_partition/CMakeLists.txt#L48-L51
 
+You must also change line 108 of secure_partition/secure_partition.c from
+```
+uint32_t index = 44; //secure_keygen(in_vec[0].base);
+```
+to
+```
+uint32_t index = secure_keygen(in_vec[0].base);
+```
+
 ## Useful information about the project:
 - Using nRF5340DK development kit.
 - nRF SDK v2.0.0
