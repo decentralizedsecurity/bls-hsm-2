@@ -45,6 +45,14 @@ int tfm_get_keystore_size(){
 	return size;
 }
 
+int tfm_store_pk(char* public_key_hex){
+	return 0;
+}
+
+int tfm_get_key(int index, char* public_key_hex){
+	return 0;
+}
+
 int tfm_secure_keygen(char* info, size_t infosize){
 	uint32_t index;
 	psa_status_t status;
@@ -63,4 +71,20 @@ int tfm_secure_keygen(char* info, size_t infosize){
 				(uint32_t)out_vec, IOVEC_LEN(out_vec));
 
 	return index;
+}
+
+int tfm_sign_pk(char* pk, char* msg, char* sign){
+	return 0;
+}
+
+int tfm_verify_sign(char* pk, char* msg, char* sig){
+	return 0;
+}
+
+void tfm_reset(){
+	
+}
+
+int tfm_import_sk(char* sk){
+	return 0;
 }
