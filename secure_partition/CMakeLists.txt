@@ -50,6 +50,12 @@ target_link_libraries(tfm_app_rot_partition_sp
 #        ${CMAKE_CURRENT_SOURCE_DIR}/../lib/libblst.a
 #)
 
+target_link_libraries(tfm_app_rot_partition_sp
+    PRIVATE
+        #${CMAKE_CURRENT_SOURCE_DIR}/libblst.a
+        ${CMAKE_CURRENT_SOURCE_DIR}/../lib/libblst.a
+)
+
 #add_library(mylib_lib STATIC IMPORTED GLOBAL)
 #add_dependencies(
 #  mylib_lib
