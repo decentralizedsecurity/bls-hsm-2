@@ -53,6 +53,21 @@ int tfm_get_key(int index, char* public_key_hex){
 	return 0;
 }
 
+int tfm_get_keys(char public_keys_hex_store_ns[10][96]){
+	psa_status_t status;
+
+	psa_invec out_vec[] = {
+		{ .base = public_keys_hex_store_ns, .len = 10*96 },
+	};
+
+	status = tfm_ns_interface_dispatch(
+				(veneer_fn)tfm_get_keys_req_veneer,
+				NULL, 0,
+				(uint32_t)out_vec, IOVEC_LEN(out_vec));
+
+	return status;
+}
+
 int tfm_secure_keygen(char* info, size_t infosize){
 	uint32_t index;
 	psa_status_t status;

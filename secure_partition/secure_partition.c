@@ -117,3 +117,12 @@ psa_status_t tfm_get_key_req(psa_invec *in_vec, size_t in_len,
 	tfm_memcpy((void*) out_vec[0].base, &index, out_vec[0].len);
 	return PSA_SUCCESS;
 }
+
+psa_status_t tfm_get_keys_req(psa_invec *in_vec, size_t in_len,
+				      psa_outvec *out_vec, size_t size_len){
+	get_keys(out_vec[0].base);
+	//char public_keys_hex_store[10][96];
+	//get_keys(public_keys_hex_store);
+	//tfm_memcpy((void*) out_vec[0].base, public_keys_hex_store[0], 9);
+	return PSA_SUCCESS;
+}

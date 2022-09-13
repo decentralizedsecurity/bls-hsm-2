@@ -36,4 +36,8 @@ void main(void)
 	printk("ret = %d\n", ret);
 	//printf(buffer);
     //memset(buffer, 0, 2048);
+	printk("keystore size: %d\n", tfm_get_keystore_size()); // MUST BE DELETED
+
+	ret = print_keys_Json(buffer);
+	printk("%s", buffer);
 }

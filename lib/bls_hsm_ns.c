@@ -92,6 +92,7 @@ int keygen(char* data, char* buff){
         #else
         pk_index = tfm_secure_keygen(info);
         #endif
+        printk("keystore size: %d\n", tfm_get_keystore_size()); // MUST BE DELETED
         return pk_index;
         
         if(pk_index == -KEYSLIMIT){
@@ -171,8 +172,14 @@ Get array of stored public keys in buffer 'buff'
 int print_keys_Json(char* buff){
     int keystore_size = get_keystore_size();
     char public_keys_hex_store[keystore_size][96];
-    get_keys(public_keys_hex_store);
-    
+    #ifndef TFM
+    //get_keys(public_keys_hex_store);
+    tfm_get_keys(public_keys_hex_store);
+    #else
+    tfm_get_keys(public_keys_hex_store);
+    #endif
+    //printk("print_keys_Json: %.9s\n", public_keys_hex_store);
+    /*
         strcat(buff, "{\"keys\":[\"");
         for(int i = 0; i < keystore_size; i++){
             for(int j = 0; j < 96; j++){
@@ -185,7 +192,7 @@ int print_keys_Json(char* buff){
         
         }
         strcat(buff, "\"]}\n");
-               
+        */       
     return keystore_size;
 }
 

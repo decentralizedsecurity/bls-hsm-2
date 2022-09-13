@@ -43,6 +43,13 @@
       "non_secure_clients": true,
       "version": 1,
       "version_policy": "STRICT"
+    },
+    {
+      "name": "TFM_GET_KEYS",
+      "signal": "TFM_GET_KEYS_REQ",
+      "non_secure_clients": true,
+      "version": 1,
+      "version_policy": "STRICT"
     }
   ]
 }

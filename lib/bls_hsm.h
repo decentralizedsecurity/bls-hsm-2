@@ -2,6 +2,7 @@
 #define bls_hsm_h
 #include "blst.h"
 #include "common.h"
+#include <sys/util.h>
 
 #define MAX_KEYSTORE_SIZE 10
 
@@ -212,6 +213,38 @@ int pk_in_keystore(char * public_key_hex, int offset){
         return ret;
 }
 
+// MAYBE SHOULD BE DELETED
+int hex2char_todo(uint8_t x, char *c)
+{
+	if (x <= 9) {
+		*c = x + '0';
+	} else  if (x <= 15) {
+		*c = x - 10 + 'a';
+	} else {
+		return -22;
+	}
+
+	return 0;
+}
+size_t bin2hex_todo(const uint8_t *buf, size_t buflen, char *hex, size_t hexlen)
+{
+	if ((hexlen + 1) < buflen * 2) {
+		return 0;
+	}
+
+	for (size_t i = 0; i < buflen; i++) {
+		if (hex2char_todo(buf[i] >> 4, &hex[2 * i]) < 0) {
+			return 0;
+		}
+		if (hex2char_todo(buf[i] & 0xf, &hex[2 * i + 1]) < 0) {
+			return 0;
+		}
+	}
+
+	hex[2 * buflen] = '\0';
+	return 2 * buflen;
+}
+
 /**
  * @brief Generates a new pair of public key and secret key. Returns index of the generated pair
  * 
@@ -232,19 +265,19 @@ int secure_keygen(char* info){
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 #ifdef NRF
         // TODO
-	    /*const int random_number_len = 144;     
+	    const int random_number_len = 144;     
         uint8_t random_number[random_number_len];
         size_t olen = random_number_len;
         int ret;
 
         ret = nrf_cc3xx_platform_ctr_drbg_get(NULL, random_number, random_number_len, &olen);
         
-        ocrypto_sha256(ikm, random_number, random_number_len);*/
+        ocrypto_sha256(ikm, random_number, random_number_len);/**/
 
         // This 'for' should not be here
-        for(int i = 0; i < 32; i++){
+        /*for(int i = 0; i < 32; i++){
             ikm[i] = 0;
-        }
+        }*/
 #else
         for(int i = 0; i < 32; i++){
             ikm[i] = rand();
@@ -259,9 +292,9 @@ int secure_keygen(char* info){
         blst_keygen(secret_keys_store + keystore_size*sizeof(blst_scalar), ikm, sizeof(ikm), info, sizeof(info));
         
         // Public key
-        /*blst_sk_to_pk_in_g1(&pk, secret_keys_store + keystore_size*sizeof(blst_scalar));
+        blst_sk_to_pk_in_g1(&pk, secret_keys_store + keystore_size*sizeof(blst_scalar));
         blst_p1_compress(out, &pk);
-        if(bin2hex(out, sizeof(out), public_keys_hex_store[keystore_size], sizeof(public_keys_hex_store[keystore_size])) == 0){
+        if(bin2hex_todo(out, sizeof(out), public_keys_hex_store[keystore_size], sizeof(public_keys_hex_store[keystore_size])) == 0){
             return -BIN2HEXERR;
         }/**/
 
