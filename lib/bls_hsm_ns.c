@@ -57,8 +57,7 @@ Generates random key. Response is dumped to 'buff'
 */
 int keygen(char* data, char* buff){    
     #ifndef TFM
-    //int keystore_size = get_keystore_size();
-    int keystore_size = tfm_get_keystore_size();
+    int keystore_size = get_keystore_size();
     #else
     int keystore_size = tfm_get_keystore_size();
     #endif
@@ -85,10 +84,9 @@ int keygen(char* data, char* buff){
         
         // Generate sk and pk
         #ifndef TFM
-        //pk_index = secure_keygen(info);
-        pk_index = tfm_secure_keygen(info, 32);
+        pk_index = secure_keygen(info);
         #else
-        pk_index = tfm_secure_keygen(info);
+        pk_index = tfm_secure_keygen(info, 32);
         #endif
         return pk_index; // TODO: It should be done at the end of the function
         
@@ -167,7 +165,12 @@ int verify(char* pk, char* msg, char* sig, char* buff){
 Get public key at given index
 */
 int get_pk(int index, char* pk_hex){
-    int ret = tfm_get_key(index, pk_hex);
+    int ret;
+    #ifndef TFM
+    ret = get_key(index, pk_hex);
+    #else
+    ret = tfm_get_key(index, pk_hex);
+    #endif
     return ret;
 }
 
@@ -178,8 +181,7 @@ int print_keys_Json(char* buff){
     int keystore_size = get_keystore_size();
     char public_keys_hex_store/*[keystore_size]*/[96];
     #ifndef TFM
-    //get_keys(public_keys_hex_store);
-    tfm_get_keys(public_keys_hex_store);
+    get_keys(public_keys_hex_store);
     #else
     tfm_get_keys(public_keys_hex_store);
     #endif

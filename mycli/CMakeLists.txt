@@ -21,7 +21,7 @@ set_property(TARGET zephyr_property_target
 )
 
 project(mycli)
-add_definitions(-DNRF)
+add_definitions(-DNRF -DTFM)
 
 target_sources(app PRIVATE
   src/main.c
