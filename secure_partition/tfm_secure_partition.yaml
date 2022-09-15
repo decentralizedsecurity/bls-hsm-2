@@ -12,7 +12,7 @@
   "type": "APPLICATION-ROT",
   "priority": "NORMAL",
   "entry_point": "tfm_dp_req_mngr_init",
-  "stack_size": "0x1000",
+  "stack_size": "0x800",
 
   # Service definitions for library mode.
   "secure_functions": [
