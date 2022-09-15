@@ -99,11 +99,27 @@ int tfm_secure_keygen(char* info, size_t infosize){
 				(uint32_t)in_vec, IOVEC_LEN(in_vec),
 				(uint32_t)out_vec, IOVEC_LEN(out_vec));
 
-	return index;
+	return status;
 }
 
 int tfm_sign_pk(char* pk, char* msg, char* sign){
-	return 0;
+	psa_status_t status;
+
+    psa_invec in_vec[] = {
+		{ .base = pk, .len = sizeof(pk) },
+		{ .base = msg, .len = sizeof(msg) }
+	};
+
+	psa_invec out_vec[] = {
+		{ .base = &sign, .len = sizeof(sign) },
+	};
+
+	status = tfm_ns_interface_dispatch(
+				(veneer_fn)tfm_sign_pk_req_veneer,
+				(uint32_t)in_vec, IOVEC_LEN(in_vec),
+				(uint32_t)out_vec, IOVEC_LEN(out_vec));
+
+	return status;
 }
 
 int tfm_verify_sign(char* pk, char* msg, char* sig){

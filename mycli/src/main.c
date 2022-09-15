@@ -44,5 +44,11 @@ void main(void)
 	get_pk(0, pk);
 	printk("Generated public key:\n%.96s\n", pk);
 
+	// sign_pk
+	char msg = "5656565656565656565656565656565656565656565656565656565656565656";
+	char buff[1024];
+	//signature(pk, msg, buff);	
+	//printk("Signature:\n%.32s\n", buff);
+
 	printk("!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 }

@@ -24,6 +24,7 @@ target_include_directories(tfm_app_rot_partition_sp PRIVATE ${CMAKE_CURRENT_SOUR
 target_sources(tfm_app_rot_partition_sp
     PRIVATE
         secure_partition.c
+        ${CMAKE_CURRENT_SOURCE_DIR}/../lib/common.c
 )
 
 # The generated sources

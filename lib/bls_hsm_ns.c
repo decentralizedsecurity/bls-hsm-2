@@ -128,7 +128,11 @@ int signature(char* pk, char* msg, char* buff){
     int offset = parse_hex(pk, 96);
 
     if(offset >= 0){
+        #ifndef TFM
         ret = sign_pk(pk+offset, msg, buff);
+        #else
+        ret = tfm_sign_pk(pk+offset, msg, buff);
+        #endif
         if(ret == BIN2HEXERR){
             strcat(buff, "Failed converting binary signature to string\n");
             return BIN2HEXERR;

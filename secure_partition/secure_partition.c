@@ -110,6 +110,12 @@ psa_status_t tfm_secure_keygen_req(psa_invec *in_vec, size_t in_len,
 	return PSA_SUCCESS;
 }
 
+psa_status_t tfm_sign_pk_req(psa_invec *in_vec, size_t in_len,
+				      psa_outvec *out_vec, size_t size_len){
+	int ret = sign_pk(in_vec[0].base, in_vec[1].base, (void*) out_vec[0].base);
+	return PSA_SUCCESS;
+}
+
 psa_status_t tfm_get_key_req(psa_invec *in_vec, size_t in_len,
 				      psa_outvec *out_vec, size_t size_len){
 	uint32_t index = *((uint32_t *)in_vec[0].base);
