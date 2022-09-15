@@ -110,11 +110,12 @@ psa_status_t tfm_secure_keygen_req(psa_invec *in_vec, size_t in_len,
 	return PSA_SUCCESS;
 }
 
-// WIP
 psa_status_t tfm_get_key_req(psa_invec *in_vec, size_t in_len,
 				      psa_outvec *out_vec, size_t size_len){
-	uint32_t index = 67;
-	tfm_memcpy((void*) out_vec[0].base, &index, out_vec[0].len);
+	uint32_t index = *((uint32_t *)in_vec[0].base);
+	char pk[96];
+	get_key(index, pk);
+	tfm_memcpy((void*) out_vec[0].base, pk, out_vec[0].len);
 	return PSA_SUCCESS;
 }
 

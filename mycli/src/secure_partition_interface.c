@@ -49,8 +49,22 @@ int tfm_store_pk(char* public_key_hex){
 	return 0;
 }
 
-int tfm_get_key(int index, char* public_key_hex){
-	return 0;
+int tfm_get_key(uint32_t index, char* public_key_hex){
+	psa_status_t status;
+	psa_invec in_vec[] = {
+		{ .base = &index, .len = sizeof(index) },
+	};
+
+	psa_outvec out_vec[] = {
+		{ .base = public_key_hex, .len = 96 }
+	};
+
+	status = tfm_ns_interface_dispatch(
+				(veneer_fn)tfm_get_key_req_veneer,
+				(uint32_t)in_vec,  IOVEC_LEN(in_vec),
+				(uint32_t)out_vec, IOVEC_LEN(out_vec));
+
+	return status;
 }
 
 int tfm_get_keys(char public_keys_hex_store_ns/*[10]*/[96]){

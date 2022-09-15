@@ -34,12 +34,15 @@ void main(void)
 
 	int ret = 99;
 	ret = keygen("", buffer);
-	printk("ret = %d\n", ret);
-	//printf(buffer);
-    //memset(buffer, 0, 2048);
-	printk("keystore size: %d\n", tfm_get_keystore_size()); // MUST BE DELETED
+	printk("Generated new pair of keys. Index = %d\n", ret);
+	printk("Keystore size: %d\n", tfm_get_keystore_size()); // MUST BE DELETED
 
 	ret = print_keys_Json(buffer);
+
+	// get_pk
+	char pk[96];
+	get_pk(0, pk);
+	printk("Generated public key:\n%.96s\n", pk);
 
 	printk("!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 }

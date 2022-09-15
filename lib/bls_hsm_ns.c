@@ -59,7 +59,6 @@ int keygen(char* data, char* buff){
     #ifndef TFM
     //int keystore_size = get_keystore_size();
     int keystore_size = tfm_get_keystore_size();
-    printk("tfm_get_keystore_size: %d\n", keystore_size);
     #else
     int keystore_size = tfm_get_keystore_size();
     #endif
@@ -88,12 +87,10 @@ int keygen(char* data, char* buff){
         #ifndef TFM
         //pk_index = secure_keygen(info);
         pk_index = tfm_secure_keygen(info, 32);
-        printk("tfm_secure_keygen: %d\n", pk_index);
         #else
         pk_index = tfm_secure_keygen(info);
         #endif
-        printk("keystore size: %d\n", tfm_get_keystore_size()); // MUST BE DELETED
-        return pk_index;
+        return pk_index; // TODO: It should be done at the end of the function
         
         if(pk_index == -KEYSLIMIT){
             strcat(buff, "Can't generate more keys. Limit reached.\n");
@@ -164,6 +161,14 @@ int verify(char* pk, char* msg, char* sig, char* buff){
         strcat(buff, "BLSTFAIL\n");
         return ret;
     }
+}
+
+/*
+Get public key at given index
+*/
+int get_pk(int index, char* pk_hex){
+    int ret = tfm_get_key(index, pk_hex);
+    return ret;
 }
 
 /*

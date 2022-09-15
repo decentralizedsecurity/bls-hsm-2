@@ -21,6 +21,7 @@ int keygen(char* data, char* buff);
 void get_signature(char* pk, char* msg, char* signature);
 int signature(char* pk, char* msg, char* buff);
 int verify(char* pk, char* msg, char* sig, char* buff);
+int get_pk(int index, char* pk_hex);
 // Replacing the function "void dump_keys(char* buff)" with "int print_keys_Json(char* buff)"
 int print_keys_Json(char* buff);
 void resetc(char* buff);
