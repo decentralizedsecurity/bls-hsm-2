@@ -53,11 +53,11 @@ int tfm_get_key(int index, char* public_key_hex){
 	return 0;
 }
 
-int tfm_get_keys(char public_keys_hex_store_ns[10][96]){
+int tfm_get_keys(char public_keys_hex_store_ns/*[10]*/[96]){
 	psa_status_t status;
 
 	psa_invec out_vec[] = {
-		{ .base = public_keys_hex_store_ns, .len = 10*96 },
+		{ .base = public_keys_hex_store_ns, .len = 1*96 },
 	};
 
 	status = tfm_ns_interface_dispatch(

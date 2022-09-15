@@ -171,14 +171,14 @@ Get array of stored public keys in buffer 'buff'
 */
 int print_keys_Json(char* buff){
     int keystore_size = get_keystore_size();
-    char public_keys_hex_store[keystore_size][96];
+    char public_keys_hex_store/*[keystore_size]*/[96];
     #ifndef TFM
     //get_keys(public_keys_hex_store);
     tfm_get_keys(public_keys_hex_store);
     #else
     tfm_get_keys(public_keys_hex_store);
     #endif
-    //printk("print_keys_Json: %.9s\n", public_keys_hex_store);
+    printk("print_keys_Json: %.96s\n", public_keys_hex_store);
     /*
         strcat(buff, "{\"keys\":[\"");
         for(int i = 0; i < keystore_size; i++){

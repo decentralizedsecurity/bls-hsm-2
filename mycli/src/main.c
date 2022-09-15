@@ -15,7 +15,7 @@ char buffer[2048] = "";
 
 void main(void)
 {
-	uint8_t digest[32];
+	/*uint8_t digest[32];
 
 	for (int key = 0; key < 6; key++) {
 		psa_status_t status = dp_secret_digest(key, digest, sizeof(digest));
@@ -29,7 +29,8 @@ void main(void)
 			}
 			printk("\n");
 		}
-	}
+	}/**/
+	printk("===========================>\n");
 
 	int ret = 99;
 	ret = keygen("", buffer);
@@ -39,5 +40,6 @@ void main(void)
 	printk("keystore size: %d\n", tfm_get_keystore_size()); // MUST BE DELETED
 
 	ret = print_keys_Json(buffer);
-	printk("%s", buffer);
+
+	printk("!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 }
