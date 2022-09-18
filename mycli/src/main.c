@@ -52,5 +52,11 @@ void main(void)
 	//signature(pk, msg, buff);	
 	//printk("Signature:\n%.32s\n", buff);
 
+	// verify_sign
+	ret = verify(pk, msg,
+		"0xb912c912616709f6a190b03db1a259ca21f535abe51f88d6c95407a81fd8648b067c5e0548587f6a84f2dea9afd2098812bb1d7fb188f1d04411a04f25042b627c5f8d60dcef6416072cfef40b799b3c89397bcddf69ae62611484bfc6e83689",
+		buffer);
+	printk("verify: %d\n", ret);
+
 	printk("!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 }

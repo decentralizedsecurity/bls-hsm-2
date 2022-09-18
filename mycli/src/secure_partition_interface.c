@@ -128,7 +128,14 @@ int tfm_sign_pk(char* pk, char* msg, char* sign){
 }
 
 int tfm_verify_sign(char* pk, char* msg, char* sig){
-	return 0;
+	psa_status_t status;
+
+	status = tfm_ns_interface_dispatch(
+				(veneer_fn)tfm_verify_sign_req_veneer,
+				NULL, 0,
+				NULL, 0);
+
+	return status;
 }
 
 void tfm_reset(){
