@@ -132,6 +132,7 @@ int signature(char* pk, char* msg, char* buff){
         ret = sign_pk(pk+offset, msg, buff);
         #else
         ret = tfm_sign_pk(pk+offset, msg, buff);
+        printk("ret = %d\n", ret);
         #endif
         if(ret == BIN2HEXERR){
             strcat(buff, "Failed converting binary signature to string\n");
