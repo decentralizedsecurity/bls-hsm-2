@@ -129,7 +129,7 @@ int pk_parse(char* pk_hex, blst_p1_affine* pk, char* buff){
                 if(buff != NULL) strcat(buff, "Public key contains incorrect characters.\n");
                 error = offset;
         }else{
-            if(hex2bin(pk_hex + offset, 96, pk_bin, 48) == 0) {
+            if(hex2bin_todo(pk_hex + offset, 96, pk_bin, 48) == 0) {
                 if(buff != NULL) strcat(buff, "Failed converting public key to binary array\n");
                 error = HEX2BINERR;
             }else{
@@ -180,7 +180,7 @@ int sig_parse(char* sig_hex, blst_p2_affine* sig, char* buff){
             if(buff != NULL) strcat(buff, "Signature contains incorrect characters.\n");
             error = offset;
         }else{
-            if(hex2bin(sig_hex + offset, 192, sig_bin, 96) == 0) {
+            if(hex2bin_todo(sig_hex + offset, 192, sig_bin, 96) == 0) {
                 if(buff != NULL) strcat(buff, "Failed converting signature to binary array\n");
                 error = HEX2BINERR;
             }else{
@@ -393,7 +393,7 @@ int sign_pk(char* pk, char* msg, char* sign){
 int verify_sign(char* pk, char* msg, char* sig){
         char dst[] = "BLS_SIG_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_"; //IETF BLS Signature V4
 
-        blst_p1_affine pk_bin;
+        /*blst_p1_affine pk_bin;
         blst_p2_affine sig_bin;
         int len = msg_len(msg);
         uint8_t msg_bin[len/2 + len%2];
@@ -405,7 +405,8 @@ int verify_sign(char* pk, char* msg, char* sig){
             }
         }else{
             return -1;
-        }
+        }*/
+        return -8;
 }
 
 /**

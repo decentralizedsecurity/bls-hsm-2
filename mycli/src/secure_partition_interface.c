@@ -129,13 +129,26 @@ int tfm_sign_pk(char* pk, char* msg, char* sign){
 
 int tfm_verify_sign(char* pk, char* msg, char* sig){
 	psa_status_t status;
+	uint32_t ret;
+
+	psa_invec in_vec[] = {
+		{ .base = pk, .len = /*sizeof(pk)*/97 },
+		{ .base = msg, .len = /*sizeof(msg)*/65 },
+		{ .base = sig, .len = /*sizeof(msg)*/97 }
+	};
+
+	psa_invec out_vec[] = {
+		{ .base = &ret, .len = sizeof(ret) },
+	};
 
 	status = tfm_ns_interface_dispatch(
 				(veneer_fn)tfm_verify_sign_req_veneer,
-				NULL, 0,
-				NULL, 0);
+				(uint32_t)in_vec, IOVEC_LEN(in_vec),
+				(uint32_t)out_vec, IOVEC_LEN(out_vec));
 
-	return status;
+	printk("status = %d, ret = %d\n", status, ret);
+
+	return ret;
 }
 
 void tfm_reset(){

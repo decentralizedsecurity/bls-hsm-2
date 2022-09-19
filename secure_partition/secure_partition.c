@@ -123,7 +123,9 @@ psa_status_t tfm_sign_pk_req(psa_invec *in_vec, size_t in_len,
 
 psa_status_t tfm_verify_sign_req(psa_invec *in_vec, size_t in_len,
 				      psa_outvec *out_vec, size_t size_len){
-	return 89;
+	uint32_t ret = verify_sign(in_vec[0].base, in_vec[1].base, in_vec[2].base);
+	//tfm_memcpy((void*) out_vec[0].base, ret, out_vec[0].len);
+	return ret;
 }
 
 psa_status_t tfm_get_key_req(psa_invec *in_vec, size_t in_len,
