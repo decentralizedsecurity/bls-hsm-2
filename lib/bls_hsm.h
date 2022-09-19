@@ -370,12 +370,12 @@ int sign_pk(char* pk, char* msg, char* sign){
                 blst_p2 sig;
                 byte sig_bin[96];
                 char sig_hex[192];
-                /*blst_sign_pk_in_g1(&sig, &hash, secret_keys_store + pk_index*sizeof(blst_scalar));
+                blst_sign_pk_in_g1(&sig, &hash, secret_keys_store + pk_index*sizeof(blst_scalar));
                 sig_serialize(sig_bin, sig);
                 if(bin2hex_todo(sig_bin, sizeof(sig_bin), sig_hex, sizeof(sig_hex)) == 0) {
                     return BIN2HEXERR;
                 }
-                strcpy(sign, sig_hex);*/
+                strcpy(sign, sig_hex);
                 return 0;
             }
         }else{

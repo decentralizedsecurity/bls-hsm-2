@@ -36,17 +36,22 @@ void main(void)
 	ret = keygen("", buffer);
 	printk("Generated new pair of keys. Index = %d\n", ret);
 	printk("Keystore size: %d\n", tfm_get_keystore_size()); // MUST BE DELETED
-
-	ret = print_keys_Json(buffer);
+	ret = keygen("", buffer);
+	printk("Generated new pair of keys. Index = %d\n", ret);
+	printk("Keystore size: %d\n", tfm_get_keystore_size()); // MUST BE DELETED
 
 	// get_pk
 	char pk[96];
 	get_pk(0, pk);
-	printk("Generated public key:\n%.96s\n", pk);/**/
+	printk("Generated public key 0:\n%.96s\n", pk);
+
+	// get keys
+	//print_keys_Json(buffer);
+	//printk("%s\n", buffer);
 
 	// sign_pk
-	char msg[] = "5656565656565656565656565656565656565656565656565656565656565656";
-	char buff[99];
+	//char msg[] = "5656565656565656565656565656565656565656565656565656565656565656";
+	//char buff[99];
 	//char key[] = "b2b32f7bc094abe2e5b38387160d97ae25689df57d934deedb60c7da5063c1730d0b6177b265ba37fff7387509e021c8";
 	//printk("Key: %.96s\n", key);
 	//signature(pk, msg, buff);	

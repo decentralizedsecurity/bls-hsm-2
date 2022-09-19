@@ -126,6 +126,8 @@ int signature(char* pk, char* msg, char* buff){
     int ret;
 
     int offset = parse_hex(pk, 96);
+    printk("pk (signature): %s\n", pk);
+    printk("sizeof(pk): %d\n", sizeof(pk));
 
     if(offset >= 0){
         #ifndef TFM
@@ -188,7 +190,7 @@ Get array of stored public keys in buffer 'buff'
 */
 int print_keys_Json(char* buff){
     int keystore_size = get_keystore_size();
-    char public_keys_hex_store/*[keystore_size]*/[96];
+    char public_keys_hex_store[keystore_size][96];
     #ifndef TFM
     get_keys(public_keys_hex_store);
     #else

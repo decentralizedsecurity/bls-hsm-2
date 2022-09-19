@@ -12,7 +12,7 @@ psa_status_t dp_secret_digest(uint32_t secret_index,
 int tfm_get_keystore_size();
 int tfm_store_pk(char* public_key_hex);
 int tfm_get_key(uint32_t index, char* public_key_hex);
-int tfm_get_keys(char public_keys_hex_store_ns/*[10]*/[96]);
+int tfm_get_keys(char **public_keys_hex_store_ns);
 int tfm_secure_keygen(char* info, size_t infosize);
 int tfm_sign_pk(char* pk, char* msg, char* sign);
 int tfm_verify_sign(char* pk, char* msg, char* sig);
