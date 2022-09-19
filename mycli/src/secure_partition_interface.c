@@ -152,7 +152,14 @@ int tfm_verify_sign(char* pk, char* msg, char* sig){
 }
 
 void tfm_reset(){
-	
+	psa_status_t status;
+
+	status = tfm_ns_interface_dispatch(
+				(veneer_fn)tfm_reset_req_veneer,
+				NULL, 0,
+				NULL, 0);
+
+	return status;
 }
 
 int tfm_import_sk(char* sk){

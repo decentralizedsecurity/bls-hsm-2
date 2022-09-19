@@ -147,3 +147,9 @@ psa_status_t tfm_get_keys_req(psa_invec *in_vec, size_t in_len,
 	get_keys((void*) out_vec[0].base);
 	return PSA_SUCCESS;
 }
+
+psa_status_t tfm_reset_req(psa_invec *in_vec, size_t in_len,
+				      psa_outvec *out_vec, size_t size_len){
+	reset();
+	return PSA_SUCCESS;
+}

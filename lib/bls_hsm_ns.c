@@ -218,7 +218,11 @@ int print_keys_Json(char* buff){
 Delete all stored public and secret keys. Response is dumped to 'buff'
 */
 void resetc(char* buff){
+    #ifndef TFM
     reset();
+    #else
+    tfm_reset();
+    #endif
     strcat(buff, "Keys deleted\n");
 }
 

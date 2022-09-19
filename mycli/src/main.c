@@ -65,5 +65,10 @@ void main(void)
 	printk("verify: %d\n", ret);
 	printk("buff: %s\n", buffer);*/
 
+	// reset
+	resetc(buffer);
+	printk("%s\n", buffer);
+	printk("Keystore size: %d\n", tfm_get_keystore_size());
+
 	printk("!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 }

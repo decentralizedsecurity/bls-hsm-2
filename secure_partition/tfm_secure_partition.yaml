@@ -64,6 +64,13 @@
       "non_secure_clients": true,
       "version": 1,
       "version_policy": "STRICT"
+    },
+    {
+      "name": "TFM_RESET",
+      "signal": "TFM_RESET_REQ",
+      "non_secure_clients": true,
+      "version": 1,
+      "version_policy": "STRICT"
     }
   ]
 }
