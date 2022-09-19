@@ -57,9 +57,7 @@ Generates random key. Response is dumped to 'buff'
 */
 int keygen(char* data, char* buff){    
     #ifndef TFM
-    //int keystore_size = get_keystore_size();
-    int keystore_size = tfm_get_keystore_size();
-    printk("tfm_get_keystore_size: %d\n", keystore_size);
+    int keystore_size = get_keystore_size();
     #else
     int keystore_size = tfm_get_keystore_size();
     #endif
@@ -86,14 +84,11 @@ int keygen(char* data, char* buff){
         
         // Generate sk and pk
         #ifndef TFM
-        //pk_index = secure_keygen(info);
-        pk_index = tfm_secure_keygen(info, 32);
-        printk("tfm_secure_keygen: %d\n", pk_index);
+        pk_index = secure_keygen(info);
         #else
-        pk_index = tfm_secure_keygen(info);
+        pk_index = tfm_secure_keygen(info, 32);
         #endif
-        printk("keystore size: %d\n", tfm_get_keystore_size()); // MUST BE DELETED
-        return pk_index;
+        return pk_index; // TODO: It should be done at the end of the function
         
         if(pk_index == -KEYSLIMIT){
             strcat(buff, "Can't generate more keys. Limit reached.\n");
@@ -131,9 +126,16 @@ int signature(char* pk, char* msg, char* buff){
     int ret;
 
     int offset = parse_hex(pk, 96);
+    printk("pk (signature): %s\n", pk);
+    printk("sizeof(pk): %d\n", sizeof(pk));
 
     if(offset >= 0){
+        #ifndef TFM
         ret = sign_pk(pk+offset, msg, buff);
+        #else
+        ret = tfm_sign_pk(pk+offset, msg, buff);
+        printk("ret = %d\n", ret);
+        #endif
         if(ret == BIN2HEXERR){
             strcat(buff, "Failed converting binary signature to string\n");
             return BIN2HEXERR;
@@ -156,7 +158,11 @@ int signature(char* pk, char* msg, char* buff){
 Verifies signature of given message and public key
 */
 int verify(char* pk, char* msg, char* sig, char* buff){
+    #ifndef TFM
     int ret = verify_sign(pk, msg, sig);
+    #else
+    int ret = tfm_verify_sign(pk, msg, sig);
+    #endif
     if(ret == BLSTSUCCESS){
         strcat(buff, "BLSTSUCCESS\n");
         return BLSTSUCCESS;
@@ -167,18 +173,30 @@ int verify(char* pk, char* msg, char* sig, char* buff){
 }
 
 /*
+Get public key at given index
+*/
+int get_pk(int index, char* pk_hex){
+    int ret;
+    #ifndef TFM
+    ret = get_key(index, pk_hex);
+    #else
+    ret = tfm_get_key(index, pk_hex);
+    #endif
+    return ret;
+}
+
+/*
 Get array of stored public keys in buffer 'buff'
 */
 int print_keys_Json(char* buff){
     int keystore_size = get_keystore_size();
     char public_keys_hex_store[keystore_size][96];
     #ifndef TFM
-    //get_keys(public_keys_hex_store);
-    tfm_get_keys(public_keys_hex_store);
+    get_keys(public_keys_hex_store);
     #else
     tfm_get_keys(public_keys_hex_store);
     #endif
-    //printk("print_keys_Json: %.9s\n", public_keys_hex_store);
+    printk("print_keys_Json: %.96s\n", public_keys_hex_store);
     /*
         strcat(buff, "{\"keys\":[\"");
         for(int i = 0; i < keystore_size; i++){
@@ -200,7 +218,11 @@ int print_keys_Json(char* buff){
 Delete all stored public and secret keys. Response is dumped to 'buff'
 */
 void resetc(char* buff){
+    #ifndef TFM
     reset();
+    #else
+    tfm_reset();
+    #endif
     strcat(buff, "Keys deleted\n");
 }
 

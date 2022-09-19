@@ -49,15 +49,29 @@ int tfm_store_pk(char* public_key_hex){
 	return 0;
 }
 
-int tfm_get_key(int index, char* public_key_hex){
-	return 0;
+int tfm_get_key(uint32_t index, char* public_key_hex){
+	psa_status_t status;
+	psa_invec in_vec[] = {
+		{ .base = &index, .len = sizeof(index) },
+	};
+
+	psa_outvec out_vec[] = {
+		{ .base = public_key_hex, .len = 96 }
+	};
+
+	status = tfm_ns_interface_dispatch(
+				(veneer_fn)tfm_get_key_req_veneer,
+				(uint32_t)in_vec,  IOVEC_LEN(in_vec),
+				(uint32_t)out_vec, IOVEC_LEN(out_vec));
+
+	return status;
 }
 
-int tfm_get_keys(char public_keys_hex_store_ns[10][96]){
+int tfm_get_keys(char **public_keys_hex_store_ns){
 	psa_status_t status;
 
 	psa_invec out_vec[] = {
-		{ .base = public_keys_hex_store_ns, .len = 10*96 },
+		{ .base = public_keys_hex_store_ns, .len = sizeof(char)*1*96 },
 	};
 
 	status = tfm_ns_interface_dispatch(
@@ -85,19 +99,67 @@ int tfm_secure_keygen(char* info, size_t infosize){
 				(uint32_t)in_vec, IOVEC_LEN(in_vec),
 				(uint32_t)out_vec, IOVEC_LEN(out_vec));
 
-	return index;
+	return status;
 }
 
 int tfm_sign_pk(char* pk, char* msg, char* sign){
-	return 0;
+	psa_status_t status;
+
+    psa_invec in_vec[] = {
+		{ .base = pk, .len = /*sizeof(pk)*/97 },
+		{ .base = msg, .len = /*sizeof(msg)*/65 }/**/
+	};
+
+	psa_invec out_vec[] = {
+		{ .base = &sign, .len = /*sizeof(sign)*/97 },
+	};
+
+	status = tfm_ns_interface_dispatch(
+				(veneer_fn)tfm_sign_pk_req_veneer,
+				(uint32_t)in_vec, IOVEC_LEN(in_vec),
+				(uint32_t)out_vec, IOVEC_LEN(out_vec));
+
+	printk("(tfm_sign_pk) pk: %s\n", pk);
+	printk("(tfm_sign_pk) msg: %s\n", msg);
+	printk("(tfm_sign_pk) sign: %s\n", sign);
+	printk("(tfm_sign_pk) ret: %d\n", status);
+
+	return status;
 }
 
 int tfm_verify_sign(char* pk, char* msg, char* sig){
-	return 0;
+	psa_status_t status;
+	uint32_t ret;
+
+	psa_invec in_vec[] = {
+		{ .base = pk, .len = /*sizeof(pk)*/97 },
+		{ .base = msg, .len = /*sizeof(msg)*/65 },
+		{ .base = sig, .len = /*sizeof(msg)*/97 }
+	};
+
+	psa_invec out_vec[] = {
+		{ .base = &ret, .len = sizeof(ret) },
+	};
+
+	status = tfm_ns_interface_dispatch(
+				(veneer_fn)tfm_verify_sign_req_veneer,
+				(uint32_t)in_vec, IOVEC_LEN(in_vec),
+				(uint32_t)out_vec, IOVEC_LEN(out_vec));
+
+	printk("status = %d, ret = %d\n", status, ret);
+
+	return ret;
 }
 
 void tfm_reset(){
-	
+	psa_status_t status;
+
+	status = tfm_ns_interface_dispatch(
+				(veneer_fn)tfm_reset_req_veneer,
+				NULL, 0,
+				NULL, 0);
+
+	return status;
 }
 
 int tfm_import_sk(char* sk){

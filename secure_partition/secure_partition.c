@@ -110,19 +110,46 @@ psa_status_t tfm_secure_keygen_req(psa_invec *in_vec, size_t in_len,
 	return PSA_SUCCESS;
 }
 
-// WIP
+psa_status_t tfm_sign_pk_req(psa_invec *in_vec, size_t in_len,
+				      psa_outvec *out_vec, size_t size_len){
+	//int ret = sign_pk(in_vec[0].base, in_vec[1].base, (void*) out_vec[0].base);
+	char* pk = in_vec[0].base;
+	char* msg = in_vec[1].base;
+	char* sign = (void*) out_vec[0].base;
+	int ret = sign_pk(pk, msg, sign);
+
+	return ret;
+}
+
+psa_status_t tfm_verify_sign_req(psa_invec *in_vec, size_t in_len,
+				      psa_outvec *out_vec, size_t size_len){
+	uint32_t ret = verify_sign(in_vec[0].base, in_vec[1].base, in_vec[2].base);
+	//tfm_memcpy((void*) out_vec[0].base, ret, out_vec[0].len);
+	return ret;
+}
+
 psa_status_t tfm_get_key_req(psa_invec *in_vec, size_t in_len,
 				      psa_outvec *out_vec, size_t size_len){
-	uint32_t index = 67;
-	tfm_memcpy((void*) out_vec[0].base, &index, out_vec[0].len);
+	uint32_t index = *((uint32_t *)in_vec[0].base);
+	char pk[96];
+	get_key(index, pk);
+	tfm_memcpy((void*) out_vec[0].base, pk, out_vec[0].len);
 	return PSA_SUCCESS;
 }
 
 psa_status_t tfm_get_keys_req(psa_invec *in_vec, size_t in_len,
 				      psa_outvec *out_vec, size_t size_len){
-	get_keys(out_vec[0].base);
+	//char keys[1][96];
+	//get_keys(keys);
 	//char public_keys_hex_store[10][96];
 	//get_keys(public_keys_hex_store);
-	//tfm_memcpy((void*) out_vec[0].base, public_keys_hex_store[0], 9);
+	//tfm_memcpy((void*) out_vec[0].base, /*keys[0]*/"12345678901234567890", 15);
+	get_keys((void*) out_vec[0].base);
+	return PSA_SUCCESS;
+}
+
+psa_status_t tfm_reset_req(psa_invec *in_vec, size_t in_len,
+				      psa_outvec *out_vec, size_t size_len){
+	reset();
 	return PSA_SUCCESS;
 }

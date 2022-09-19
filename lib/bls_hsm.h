@@ -10,6 +10,86 @@ blst_scalar secret_keys_store[MAX_KEYSTORE_SIZE];
 char public_keys_hex_store[MAX_KEYSTORE_SIZE][96];
 int keystore_size = 0;
 
+// MAYBE SHOULD BE DELETED
+int char2hex_todo(char c, uint8_t *x)
+{
+	if (c >= '0' && c <= '9') {
+		*x = c - '0';
+	} else if (c >= 'a' && c <= 'f') {
+		*x = c - 'a' + 10;
+	} else if (c >= 'A' && c <= 'F') {
+		*x = c - 'A' + 10;
+	} else {
+		return -22;
+	}
+
+	return 0;
+}
+int hex2char_todo(uint8_t x, char *c)
+{
+	if (x <= 9) {
+		*c = x + '0';
+	} else  if (x <= 15) {
+		*c = x - 10 + 'a';
+	} else {
+		return -22;
+	}
+
+	return 0;
+}
+size_t bin2hex_todo(const uint8_t *buf, size_t buflen, char *hex, size_t hexlen)
+{
+	if ((hexlen + 1) < buflen * 2) {
+		return 0;
+	}
+
+	for (size_t i = 0; i < buflen; i++) {
+		if (hex2char_todo(buf[i] >> 4, &hex[2 * i]) < 0) {
+			return 0;
+		}
+		if (hex2char_todo(buf[i] & 0xf, &hex[2 * i + 1]) < 0) {
+			return 0;
+		}
+	}
+
+	hex[2 * buflen] = '\0';
+	return 2 * buflen;
+}
+size_t hex2bin_todo(const char *hex, size_t hexlen, uint8_t *buf, size_t buflen)
+{
+	uint8_t dec;
+
+	if (buflen < hexlen / 2 + hexlen % 2) {
+		return 0;
+	}
+
+	/* if hexlen is uneven, insert leading zero nibble */
+	if (hexlen % 2) {
+		if (char2hex_todo(hex[0], &dec) < 0) {
+			return 0;
+		}
+		buf[0] = dec;
+		hex++;
+		buf++;
+	}
+
+	/* regular hex conversion */
+	for (size_t i = 0; i < hexlen / 2; i++) {
+		if (char2hex_todo(hex[2 * i], &dec) < 0) {
+			return 0;
+		}
+		buf[i] = dec << 4;
+
+		if (char2hex_todo(hex[2 * i + 1], &dec) < 0) {
+			return 0;
+		}
+		buf[i] += dec;
+	}
+
+	return hexlen / 2 + hexlen % 2;
+}
+// ----------------------------------------------
+
 /*
 Converts input 'pk' to binary 'out'
 */
@@ -49,7 +129,7 @@ int pk_parse(char* pk_hex, blst_p1_affine* pk, char* buff){
                 if(buff != NULL) strcat(buff, "Public key contains incorrect characters.\n");
                 error = offset;
         }else{
-            if(hex2bin(pk_hex + offset, 96, pk_bin, 48) == 0) {
+            if(hex2bin_todo(pk_hex + offset, 96, pk_bin, 48) == 0) {
                 if(buff != NULL) strcat(buff, "Failed converting public key to binary array\n");
                 error = HEX2BINERR;
             }else{
@@ -75,7 +155,7 @@ int msg_parse(char* msg, uint8_t* msg_bin, int len, char* buff){
             if(buff != NULL) strcat(buff, "Message contains incorrect characters.\n");
             error = offset;
         }else{
-            if(hex2bin(msg + offset, len, msg_bin, len/2 + len%2) == 0) {
+            if(hex2bin_todo(msg + offset, len, msg_bin, len/2 + len%2) == 0) {
                 if(buff != NULL) strcat(buff, "Incorrect message length.\n");
                 error = HEX2BINERR;
             }
@@ -100,7 +180,7 @@ int sig_parse(char* sig_hex, blst_p2_affine* sig, char* buff){
             if(buff != NULL) strcat(buff, "Signature contains incorrect characters.\n");
             error = offset;
         }else{
-            if(hex2bin(sig_hex + offset, 192, sig_bin, 96) == 0) {
+            if(hex2bin_todo(sig_hex + offset, 192, sig_bin, 96) == 0) {
                 if(buff != NULL) strcat(buff, "Failed converting signature to binary array\n");
                 error = HEX2BINERR;
             }else{
@@ -149,7 +229,7 @@ int get_key(int index, char* public_key_hex){
  * @param public_key_hex String array that contains public keys
 */
 void get_keys(char public_keys_hex_store_ns[keystore_size][96]){
-        for(int i = 0; i < keystore_size; i++){
+        for(int i = 0; i < 1; i++){
             for(int j = 0; j < 96; j++){
                 public_keys_hex_store_ns[i][j] = public_keys_hex_store[i][j];
             }
@@ -211,38 +291,6 @@ int pk_in_keystore(char * public_key_hex, int offset){
             }
         }
         return ret;
-}
-
-// MAYBE SHOULD BE DELETED
-int hex2char_todo(uint8_t x, char *c)
-{
-	if (x <= 9) {
-		*c = x + '0';
-	} else  if (x <= 15) {
-		*c = x - 10 + 'a';
-	} else {
-		return -22;
-	}
-
-	return 0;
-}
-size_t bin2hex_todo(const uint8_t *buf, size_t buflen, char *hex, size_t hexlen)
-{
-	if ((hexlen + 1) < buflen * 2) {
-		return 0;
-	}
-
-	for (size_t i = 0; i < buflen; i++) {
-		if (hex2char_todo(buf[i] >> 4, &hex[2 * i]) < 0) {
-			return 0;
-		}
-		if (hex2char_todo(buf[i] & 0xf, &hex[2 * i + 1]) < 0) {
-			return 0;
-		}
-	}
-
-	hex[2 * buflen] = '\0';
-	return 2 * buflen;
 }
 
 /**
@@ -324,7 +372,7 @@ int sign_pk(char* pk, char* msg, char* sign){
                 char sig_hex[192];
                 blst_sign_pk_in_g1(&sig, &hash, secret_keys_store + pk_index*sizeof(blst_scalar));
                 sig_serialize(sig_bin, sig);
-                if(bin2hex(sig_bin, sizeof(sig_bin), sig_hex, sizeof(sig_hex)) == 0) {
+                if(bin2hex_todo(sig_bin, sizeof(sig_bin), sig_hex, sizeof(sig_hex)) == 0) {
                     return BIN2HEXERR;
                 }
                 strcpy(sign, sig_hex);
@@ -345,7 +393,7 @@ int sign_pk(char* pk, char* msg, char* sign){
 int verify_sign(char* pk, char* msg, char* sig){
         char dst[] = "BLS_SIG_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_"; //IETF BLS Signature V4
 
-        blst_p1_affine pk_bin;
+        /*blst_p1_affine pk_bin;
         blst_p2_affine sig_bin;
         int len = msg_len(msg);
         uint8_t msg_bin[len/2 + len%2];
@@ -357,7 +405,8 @@ int verify_sign(char* pk, char* msg, char* sig){
             }
         }else{
             return -1;
-        }
+        }*/
+        return -8;
 }
 
 /**

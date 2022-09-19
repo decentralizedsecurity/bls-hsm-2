@@ -38,6 +38,20 @@
       "version_policy": "STRICT"
     },
     {
+      "name": "TFM_SIGN_PK",
+      "signal": "TFM_SIGN_PK_REQ",
+      "non_secure_clients": true,
+      "version": 1,
+      "version_policy": "STRICT"
+    },
+    {
+      "name": "TFM_VERIFY_SIGN_PK",
+      "signal": "TFM_VERIFY_SIGN_REQ",
+      "non_secure_clients": true,
+      "version": 1,
+      "version_policy": "STRICT"
+    },
+    {
       "name": "TFM_GET_KEY",
       "signal": "TFM_GET_KEY_REQ",
       "non_secure_clients": true,
@@ -47,6 +61,13 @@
     {
       "name": "TFM_GET_KEYS",
       "signal": "TFM_GET_KEYS_REQ",
+      "non_secure_clients": true,
+      "version": 1,
+      "version_policy": "STRICT"
+    },
+    {
+      "name": "TFM_RESET",
+      "signal": "TFM_RESET_REQ",
       "non_secure_clients": true,
       "version": 1,
       "version_policy": "STRICT"
