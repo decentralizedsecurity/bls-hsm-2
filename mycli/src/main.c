@@ -50,12 +50,13 @@ void main(void)
 	//printk("%s\n", buffer);
 
 	// sign_pk
-	//char msg[] = "5656565656565656565656565656565656565656565656565656565656565656";
-	//char buff[99];
-	//char key[] = "b2b32f7bc094abe2e5b38387160d97ae25689df57d934deedb60c7da5063c1730d0b6177b265ba37fff7387509e021c8";
-	//printk("Key: %.96s\n", key);
-	//signature(pk, msg, buff);	
-	//printk("Signature:\n%.32s\n", buff);
+	char msg[] = "5656565656565656565656565656565656565656565656565656565656565656";
+	char buff[99];
+	char key[] = "b2b32f7bc094abe2e5b38387160d97ae25689df57d934deedb60c7da5063c1730d0b6177b265ba37fff7387509e021c8";
+	printk("Key: %.96s\n", key);
+	buff[0] = '\0';
+	signature(pk, msg, buff);	
+	printk("Signature:\n%.32s\n", buff);
 
 	// verify_sign
 	/*char pk2[] = "0x86a722b1f5c1cb1420ff0766cf5205b023de2e9c69efc65dbf976af2d710c3d12f937cf7104c9cd51bb4c62ff185d07f";
