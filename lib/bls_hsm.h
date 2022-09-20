@@ -375,7 +375,7 @@ int sign_pk(char* pk, char* msg, char* sign){
                 if(bin2hex_todo(sig_bin, sizeof(sig_bin), sig_hex, sizeof(sig_hex)) == 0) {
                     return BIN2HEXERR;
                 }
-                strcpy(sign, sig_hex);
+                strcpy(sign, sig_hex);/**/
                 return 0;
             }
         }else{

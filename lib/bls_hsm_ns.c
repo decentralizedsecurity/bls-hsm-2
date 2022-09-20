@@ -126,8 +126,9 @@ int signature(char* pk, char* msg, char* buff){
     int ret;
 
     int offset = parse_hex(pk, 96);
+    printk("offset = %d\n", offset);
     printk("pk (signature): %s\n", pk);
-    printk("sizeof(pk): %d\n", sizeof(pk));
+    printk("strlen(pk): %d\n", strlen(pk));
 
     if(offset >= 0){
         #ifndef TFM
