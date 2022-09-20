@@ -1,21 +1,13 @@
-# tfm-test
+# bls-hsm-2. Implementing TF-M
 
 This repository is an effort to move the implementation of a secure partition for the [bls-hsm](https://github.com/decentralizedsecurity/bls-hsm) project from SPM to TF-M. The idea is that the blst functions that are used are executed in the secure partition.
 
-When importing a static library (containing the blst functions) there is a problem with flash memory. This problem is detailed in the following forum: https://devzone.nordicsemi.com/f/nordic-q-a/90871/problem-importing-a-library-into-tf-m-not-enough-space-to-import-i
+Previously, when importing a static library (containing the blst functions) there is a problem with flash memory. This problem is detailed and solved in the following forum: https://devzone.nordicsemi.com/f/nordic-q-a/90871/problem-importing-a-library-into-tf-m-not-enough-space-to-import-i
 
-## How to reproduce the error:
-If you do a build of the application (mycli), no problem is shown. In order to reproduce the error, lines 48, 49, 50 and 51 of secure_partition/CMakeLists.txt must be uncommented.
-https://github.com/Pablosanserr/tfm-test/blob/ea84b72612f2c8083fd846f718df5f58887fca76/secure_partition/CMakeLists.txt#L48-L51
+Now, blst its imported. In `bls_hsm.h`, `blst_keygen` (a blst function) is executed correctly. However, when `blst_sign_pk_in_g1` is executed, there is a problem and the board. Therefore, I guess the problem is not in the import of the library, but must be related to memory.
 
-You must also change line 108 of secure_partition/secure_partition.c from
-```
-uint32_t index = 44; //secure_keygen(in_vec[0].base);
-```
-to
-```
-uint32_t index = secure_keygen(in_vec[0].base);
-```
+## How to reproduce the error
+Build and execute application mycli. You will see that the board reboots.
 
 ## Useful information about the project:
 - Using nRF5340DK development kit.
