@@ -36,26 +36,24 @@ void main(void)
 	ret = keygen("", buffer);
 	printk("Generated new pair of keys. Index = %d\n", ret);
 	printk("Keystore size: %d\n", tfm_get_keystore_size()); // MUST BE DELETED
+	memset(buffer, 0, 2048);
 	ret = keygen("", buffer);
 	printk("Generated new pair of keys. Index = %d\n", ret);
 	printk("Keystore size: %d\n", tfm_get_keystore_size()); // MUST BE DELETED
+	memset(buffer, 0, 2048);
 
 	// get_pk
-	char pk[96];
+	char pk[97];
 	get_pk(0, pk);
-	printk("Generated public key 0:\n%.96s\n", pk);
-
-	// get keys
-	//print_keys_Json(buffer);
-	//printk("%s\n", buffer);
+	pk[96] = '\0';
+	printk("Generated public key 0:\n%s\n", pk);
 
 	// sign_pk
-	//char msg[] = "5656565656565656565656565656565656565656565656565656565656565656";
-	//char buff[99];
+	char msg[] = "5656565656565656565656565656565656565656565656565656565656565656";
 	//char key[] = "b2b32f7bc094abe2e5b38387160d97ae25689df57d934deedb60c7da5063c1730d0b6177b265ba37fff7387509e021c8";
-	//printk("Key: %.96s\n", key);
-	//signature(pk, msg, buff);	
-	//printk("Signature:\n%.32s\n", buff);
+	signature(pk, msg, buffer);	
+	printk("Signature:\n%s\n", buffer);
+	memset(buffer, 0, 2048);
 
 	// verify_sign
 	/*char pk2[] = "0x86a722b1f5c1cb1420ff0766cf5205b023de2e9c69efc65dbf976af2d710c3d12f937cf7104c9cd51bb4c62ff185d07f";
@@ -68,7 +66,8 @@ void main(void)
 	// reset
 	resetc(buffer);
 	printk("%s\n", buffer);
-	printk("Keystore size: %d\n", tfm_get_keystore_size());
+	memset(buffer, 0, 2048);
+	printk("Keystore size: %d\n", tfm_get_keystore_size()); // MUST BE DELETED
 
 	printk("!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 }
