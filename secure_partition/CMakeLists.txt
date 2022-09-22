@@ -48,14 +48,8 @@ target_link_libraries(tfm_app_rot_partition_sp
         tfm_psa_rot_partition_crypto
 )
 
-#target_link_libraries(tfm_app_rot_partition_sp
-#    PRIVATE
-#        ${CMAKE_CURRENT_SOURCE_DIR}/../lib/libblst.a
-#)
-
 target_link_libraries(tfm_app_rot_partition_sp
     PRIVATE
-        #${CMAKE_CURRENT_SOURCE_DIR}/libblst.a
         ${CMAKE_CURRENT_SOURCE_DIR}/../lib/libblst.a
 )
 
