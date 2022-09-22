@@ -4,7 +4,7 @@ This repository is an effort to move the implementation of a secure partition fo
 
 Previously, when importing a static library (containing the blst functions) there is a problem with flash memory. This problem is detailed and solved in the following forum: https://devzone.nordicsemi.com/f/nordic-q-a/90871/problem-importing-a-library-into-tf-m-not-enough-space-to-import-i
 
-Now, blst its imported. In `bls_hsm.h`, `blst_keygen` (a blst function) is executed correctly. However, when `blst_sign_pk_in_g1` is executed, there is a problem and the board. Therefore, I guess the problem is not in the import of the library, but must be related to memory.
+Now, blst its imported. In `bls_hsm.h`, `blst_keygen` (a blst function) is executed correctly. However, when `blst_sign_pk_in_g1` is executed, there is a problem and the board. Therefore, I guess the problem is not in the import of the library, but must be related to memory. There is an entry in the Nordic Semiconductor forum aiming to solve this problem: https://devzone.nordicsemi.com/f/nordic-q-a/92220/board-reboots-when-a-function-is-executed-in-tf-m
 
 However, in the project using SPM, [bls-hsm](https://github.com/decentralizedsecurity/bls-hsm), all the functions of the blst library did work correctly.
 
