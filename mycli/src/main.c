@@ -51,17 +51,25 @@ void main(void)
 	// sign_pk
 	char msg[] = "5656565656565656565656565656565656565656565656565656565656565656";
 	//char key[] = "b2b32f7bc094abe2e5b38387160d97ae25689df57d934deedb60c7da5063c1730d0b6177b265ba37fff7387509e021c8";
-	//signature(pk, msg, buffer);	
+	char sign[193];
+	signature(pk, msg, buffer);	
 	printk("Signature:\n%s\n", buffer);
+	strcpy(sign, buffer);
 	memset(buffer, 0, 2048);
 
 	// verify_sign
-	/*char pk2[] = "0x86a722b1f5c1cb1420ff0766cf5205b023de2e9c69efc65dbf976af2d710c3d12f937cf7104c9cd51bb4c62ff185d07f";
-	ret = verify(pk2, msg,
-		"0xb912c912616709f6a190b03db1a259ca21f535abe51f88d6c95407a81fd8648b067c5e0548587f6a84f2dea9afd2098812bb1d7fb188f1d04411a04f25042b627c5f8d60dcef6416072cfef40b799b3c89397bcddf69ae62611484bfc6e83689",
-		buffer);
-	printk("verify: %d\n", ret);
-	printk("buffer: %s\n", buffer);/**/
+	verify(pk, msg, sign, buffer);
+	printk("Verify generated signature:\n%s\n", buffer);
+	memset(buffer, 0, 2048);
+
+	verify(
+		"86a722b1f5c1cb1420ff0766cf5205b023de2e9c69efc65dbf976af2d710c3d12f937cf7104c9cd51bb4c62ff185d07f",
+		"5656565656565656565656565656565656565656565656565656565656565656",
+		"b912c912616709f6a190b03db1a259ca21f535abe51f88d6c95407a81fd8648b067c5e0548587f6a84f2dea9afd2098812bb1d7fb188f1d04411a04f25042b627c5f8d60dcef6416072cfef40b799b3c89397bcddf69ae62611484bfc6e83689",
+		buffer
+	);
+	printk("Verify other signature:\n%s\n", buffer);
+	memset(buffer, 0, 2048);
 
 	// reset
 	resetc(buffer);

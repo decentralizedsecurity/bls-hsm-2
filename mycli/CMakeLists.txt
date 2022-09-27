@@ -21,7 +21,7 @@ set_property(TARGET zephyr_property_target
 )
 
 project(mycli)
-add_definitions(-DNRF -DTFM)
+add_definitions(-DNRF)
 
 target_sources(app PRIVATE
   src/main.c
@@ -34,8 +34,8 @@ zephyr_library_include_directories(
   ../lib/
 )
 
-#add_library(testlib STATIC IMPORTED)
-#target_link_libraries(app PUBLIC ${APPLICATION_SOURCE_DIR}/../lib/libblst.a)
+add_library(testlib STATIC IMPORTED)
+target_link_libraries(app PUBLIC ${APPLICATION_SOURCE_DIR}/../lib/libblst.a)
 
 #add_library(mylib_lib STATIC IMPORTED GLOBAL)
 #add_dependencies(
