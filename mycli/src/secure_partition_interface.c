@@ -67,7 +67,7 @@ int tfm_get_key(uint32_t index, char* public_key_hex){
 	return status;
 }
 
-int tfm_get_keys(char **public_keys_hex_store_ns){
+int tfm_get_keys(char public_keys_hex_store_ns[10][96]){
 	psa_status_t status;
 
 	psa_invec out_vec[] = {

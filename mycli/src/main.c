@@ -51,7 +51,7 @@ void main(void)
 	// sign_pk
 	char msg[] = "5656565656565656565656565656565656565656565656565656565656565656";
 	//char key[] = "b2b32f7bc094abe2e5b38387160d97ae25689df57d934deedb60c7da5063c1730d0b6177b265ba37fff7387509e021c8";
-	signature(pk, msg, buffer);	
+	//signature(pk, msg, buffer);	
 	printk("Signature:\n%s\n", buffer);
 	memset(buffer, 0, 2048);
 
