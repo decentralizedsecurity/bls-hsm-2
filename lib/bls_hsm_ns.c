@@ -132,7 +132,6 @@ int signature(char* pk, char* msg, char* buff){
         ret = sign_pk(pk+offset, msg, buff);
         #else
         ret = tfm_sign_pk(pk+offset, msg, buff);
-        printk("ret = %d\n", ret);
         #endif
         if(ret == BIN2HEXERR){
             strcat(buff, "Failed converting binary signature to string\n");
@@ -245,6 +244,7 @@ int import(char* sk, char* buff){
             }
         }else if(offset == BADFORMAT){
             strcat(buff, "Incorrect characters\n");
+            return BADFORMAT;
         }else{
             strcat(buff, "Incorrect secret key length\n");
             return BADSKLEN;  
@@ -284,7 +284,6 @@ int get_decryption_key_scrypt(char* password, int dklen, int n,  int r, int p, c
     Returns 0 on succes and error number on error
 */
 int verify_password(char* checksum_message_hex, char* cipher_message_hex, unsigned char* decription_key){
-    int error;
   
     int cipher_message_len = strlen(cipher_message_hex)/2;
     unsigned char cipher_message_bin[cipher_message_len];
@@ -328,8 +327,6 @@ int verify_password(char* checksum_message_hex, char* cipher_message_hex, unsign
     Returns 0 on succes and error number on error
 */
 int get_private_key(char* cipher_message, char* iv_str, unsigned char* decription_key, char* private_key){
-    int error;
-
     int cipher_message_len = strlen(cipher_message)/2;
     unsigned char cipher_message_bin[cipher_message_len];
     if(hex2bin(cipher_message, strlen(cipher_message), cipher_message_bin, strlen(cipher_message)/2) != strlen(cipher_message)/2){
