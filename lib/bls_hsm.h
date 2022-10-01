@@ -313,6 +313,12 @@ int secure_keygen(char* info){
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 #ifdef NRF
         // TODO
+	    #ifndef TFM
+        // This 'for' should not be here
+        for(int i = 0; i < 32; i++){
+            ikm[i] = 0;
+        }
+        #else
 	    const int random_number_len = 144;     
         uint8_t random_number[random_number_len];
         size_t olen = random_number_len;
@@ -321,12 +327,7 @@ int secure_keygen(char* info){
         ret = nrf_cc3xx_platform_ctr_drbg_get(NULL, random_number, random_number_len, &olen);
         
         ocrypto_sha256(ikm, random_number, random_number_len);/**/
-
-        // This 'for' should not be here
-        /*for(int i = 0; i < 32; i++){
-            ikm[i] = 0;
-        }*/
-#else
+        #endif
         for(int i = 0; i < 32; i++){
             ikm[i] = rand();
         }
@@ -380,7 +381,7 @@ int sign_pk(char* pk, char* msg, char* sign){
             }
         }else{
             return PKNOTFOUND;
-        }      
+        }     
 }
 
 /**
@@ -393,7 +394,7 @@ int sign_pk(char* pk, char* msg, char* sign){
 int verify_sign(char* pk, char* msg, char* sig){
         char dst[] = "BLS_SIG_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_"; //IETF BLS Signature V4
 
-        /*blst_p1_affine pk_bin;
+        blst_p1_affine pk_bin;
         blst_p2_affine sig_bin;
         int len = msg_len(msg);
         uint8_t msg_bin[len/2 + len%2];
@@ -405,7 +406,7 @@ int verify_sign(char* pk, char* msg, char* sig){
             }
         }else{
             return -1;
-        }*/
+        }
         return -8;
 }
 
