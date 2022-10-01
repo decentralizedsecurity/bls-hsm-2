@@ -110,7 +110,7 @@ Get 'hash' from binary string 'msg_bin' with length 'len'
 void get_point_from_msg(blst_p2* hash, uint8_t* msg_bin, int len){
         char dst[] = "BLS_SIG_BLS12381G2_XMD:SHA-256_SSWU_RO_POP_"; //IETF BLS Signature V4
         //Obtain the point from a message
-        blst_hash_to_g2(hash, msg_bin, len, dst, sizeof(dst)-1, NULL, 0);
+        blst_hash_to_g2(hash, msg_bin, len, (byte *) dst, sizeof(dst)-1, NULL, 0);
 }
 
 /*
@@ -338,7 +338,7 @@ int secure_keygen(char* info){
         if (info == NULL) info = default_info;
 
         // Secret key (256-bit scalar)
-        blst_keygen(secret_keys_store + keystore_size*sizeof(blst_scalar), ikm, sizeof(ikm), info, sizeof(info));
+        blst_keygen(secret_keys_store + keystore_size*sizeof(blst_scalar), ikm, sizeof(ikm), (byte *) info, sizeof(info));
         
         // Public key
         blst_sk_to_pk_in_g1(&pk, secret_keys_store + keystore_size*sizeof(blst_scalar));
@@ -381,7 +381,9 @@ int sign_pk(char* pk, char* msg, char* sign){
             }
         }else{
             return PKNOTFOUND;
-        }     
+        }   
+        return -99; // TODO: Warning while building if there is no return at the end
+
 }
 
 /**
@@ -399,7 +401,7 @@ int verify_sign(char* pk, char* msg, char* sig){
         int len = msg_len(msg);
         uint8_t msg_bin[len/2 + len%2];
         if((pk_parse(pk, &pk_bin, NULL) || msg_parse(msg, msg_bin, len, NULL) || sig_parse(sig, &sig_bin, NULL)) == 0){
-            if(blst_core_verify_pk_in_g1(&pk_bin, &sig_bin, 1, msg_bin, len/2 + len%2, dst, sizeof(dst)-1, NULL, 0) != BLST_SUCCESS){
+            if(blst_core_verify_pk_in_g1(&pk_bin, &sig_bin, 1, msg_bin, len/2 + len%2, (byte *) dst, sizeof(dst)-1, NULL, 0) != BLST_SUCCESS){
                 return BLSTFAIL;
             }else{
                 return BLSTSUCCESS;
