@@ -36,11 +36,11 @@ void main(void)
 	int ret = 99;
 	ret = keygen("", buffer);
 	printk("Generated new pair of keys. Index = %d\n", ret);
-	printk("Keystore size: %d\n", tfm_get_keystore_size()); // MUST BE DELETED
+	printk("Keystore size: %d\n", get_keystore_length()); // MUST BE DELETED
 	memset(buffer, 0, 2048);
 	ret = keygen("", buffer);
 	printk("Generated new pair of keys. Index = %d\n", ret);
-	printk("Keystore size: %d\n", tfm_get_keystore_size()); // MUST BE DELETED
+	printk("Keystore size: %d\n", get_keystore_length()); // MUST BE DELETED
 	memset(buffer, 0, 2048);
 
 	// get_pk
@@ -68,7 +68,7 @@ void main(void)
 	resetc(buffer);
 	printk("%s\n", buffer);
 	memset(buffer, 0, 2048);
-	printk("Keystore size: %d\n", tfm_get_keystore_size()); // MUST BE DELETED
+	printk("Keystore size: %d\n", get_keystore_length()); // MUST BE DELETED
 
 	printk("!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 }

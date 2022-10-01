@@ -53,6 +53,17 @@ int PBKDF2(uint8_t* salt, uint8_t* password, int it_cnt, uint8_t* key)
 #endif
 
 /*
+Returns number of keys stored
+*/
+int get_keystore_length(){
+    #ifndef TFM
+    return get_keystore_size();
+    #else
+    return tfm_get_keystore_size();
+    #endif
+}
+
+/*
 Generates random key. Response is dumped to 'buff'
 */
 int keygen(char* data, char* buff){    
