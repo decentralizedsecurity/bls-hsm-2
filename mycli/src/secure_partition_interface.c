@@ -39,7 +39,7 @@ int tfm_get_keystore_size(){
 
 	status = tfm_ns_interface_dispatch(
 				(veneer_fn)tfm_get_keystore_size_req_veneer,
-				NULL,  0,
+				(uint32_t) NULL,  0,
 				(uint32_t)out_vec, IOVEC_LEN(out_vec));
 
 	return size;
@@ -76,7 +76,7 @@ int tfm_get_keys(char public_keys_hex_store_ns[10][96]){
 
 	status = tfm_ns_interface_dispatch(
 				(veneer_fn)tfm_get_keys_req_veneer,
-				NULL, 0,
+				(uint32_t) NULL, 0,
 				(uint32_t)out_vec, IOVEC_LEN(out_vec));
 
 	return status;
@@ -119,10 +119,10 @@ int tfm_sign_pk(char* pk, char* msg, char* sign){
 				(uint32_t)in_vec, IOVEC_LEN(in_vec),
 				(uint32_t)out_vec, IOVEC_LEN(out_vec));
 
-	printk("(tfm_sign_pk) pk: %s\n", pk);
+	/*printk("(tfm_sign_pk) pk: %s\n", pk);
 	printk("(tfm_sign_pk) msg: %s\n", msg);
 	printk("(tfm_sign_pk) sign: %s\n", sign);
-	printk("(tfm_sign_pk) ret: %d\n", status);
+	printk("(tfm_sign_pk) ret: %d\n", status);*/
 
 	return status;
 }
@@ -146,18 +146,16 @@ int tfm_verify_sign(char* pk, char* msg, char* sig){
 				(uint32_t)in_vec, IOVEC_LEN(in_vec),
 				(uint32_t)out_vec, IOVEC_LEN(out_vec));
 
-	printk("status = %d, ret = %d\n", status, ret);
-
 	return ret;
 }
 
-void tfm_reset(){
+int tfm_reset(){
 	psa_status_t status;
 
 	status = tfm_ns_interface_dispatch(
 				(veneer_fn)tfm_reset_req_veneer,
-				NULL, 0,
-				NULL, 0);
+				(uint32_t) NULL, 0,
+				(uint32_t) NULL, 0);
 
 	return status;
 }

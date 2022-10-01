@@ -53,6 +53,17 @@ int PBKDF2(uint8_t* salt, uint8_t* password, int it_cnt, uint8_t* key)
 #endif
 
 /*
+Returns number of keys stored
+*/
+int get_keystore_length(){
+    #ifndef TFM
+    return get_keystore_size();
+    #else
+    return tfm_get_keystore_size();
+    #endif
+}
+
+/*
 Generates random key. Response is dumped to 'buff'
 */
 int keygen(char* data, char* buff){    
@@ -193,7 +204,7 @@ int print_keys_Json(char* buff){
     #else
     tfm_get_keys(public_keys_hex_store);
     #endif
-    printk("print_keys_Json: %.96s\n", public_keys_hex_store);
+    //printk("print_keys_Json: %.96s\n", public_keys_hex_store);
     /*
         strcat(buff, "{\"keys\":[\"");
         for(int i = 0; i < keystore_size; i++){
@@ -231,7 +242,11 @@ int import(char* sk, char* buff){
         int offset = parse_hex(sk, 64);
 
         if(offset >= 0){
+            #ifndef TFM
             int ret = import_sk(sk + offset);
+            #else
+            int ret = tfm_import_sk(sk + offset);
+            #endif
             if(ret == -KEYSLIMIT){
                 strcat(buff, "Limit reached\n");
                 return KEYSLIMIT;
@@ -248,13 +263,13 @@ int import(char* sk, char* buff){
         }else{
             strcat(buff, "Incorrect secret key length\n");
             return BADSKLEN;  
-
         }
     }else{
             strcat(buff, "Limit reached\n");
             return KEYSLIMIT;
-
     }
+
+    return -99; // TODO: Warning while building if there is no return at the end
 }
 
 /*
