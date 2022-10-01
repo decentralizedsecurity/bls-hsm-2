@@ -16,5 +16,5 @@ int tfm_get_keys(char public_keys_hex_store_ns[10][96]);
 int tfm_secure_keygen(char* info, size_t infosize);
 int tfm_sign_pk(char* pk, char* msg, char* sign);
 int tfm_verify_sign(char* pk, char* msg, char* sig);
-void tfm_reset();
+int tfm_reset();
 int tfm_import_sk(char* sk);
