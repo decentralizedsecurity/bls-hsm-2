@@ -238,7 +238,12 @@ void get_keys(char public_keys_hex_store_ns[keystore_size][96]){
 
 void hash(uint8_t* out, uint8_t* in, size_t size){
 #ifdef NRF
-	    ocrypto_sha256(out, in, size);
+	    //ocrypto_sha256(out, in, size);
+        // TODO: ocrypto_sha256 causes warning. Provisionally, in[i] will be used
+        // This 'for' should not be here
+        for(int i = 0; i < 32; i++){
+            out[i] = in[i];
+        }
 #else // TODO:  implement hash in c
         for(int i = 0; i < 32; i++){
             out[i] = in[i];
@@ -249,12 +254,13 @@ void hash(uint8_t* out, uint8_t* in, size_t size){
 
 #ifdef NRF
 // TODO
-/*
+
 void aes128ctr(uint8_t* key, uint8_t* iv, uint8_t* in, uint8_t* out){
-    ocrypto_aes_ctr_ctx ctx;
+    // TODO
+    /*ocrypto_aes_ctr_ctx ctx;
     ocrypto_aes_ctr_init(&ctx, key, 16, iv);
-    ocrypto_aes_ctr_decrypt(&ctx, out, in, 32);
-}*/
+    ocrypto_aes_ctr_decrypt(&ctx, out, in, 32);*/
+}
 #endif
 
 /**
@@ -319,15 +325,21 @@ int secure_keygen(const char* info){
             ikm[i] = 0;
         }
         #else
-	    const int random_number_len = 144;     
+	    /*const int random_number_len = 144;     
         uint8_t random_number[random_number_len];
         size_t olen = random_number_len;
         int ret;
 
         ret = nrf_cc3xx_platform_ctr_drbg_get(NULL, random_number, random_number_len, &olen);
         
-        ocrypto_sha256(ikm, random_number, random_number_len);/**/
+        ocrypto_sha256(ikm, random_number, random_number_len);*/
+        // TODO: This ikm generation causes warning. Provisionally, rand() will be used
+        // This 'for' should not be here
+        for(int i = 0; i < 32; i++){
+            ikm[i] = rand();
+        }
         #endif
+#else
         for(int i = 0; i < 32; i++){
             ikm[i] = rand();
         }
