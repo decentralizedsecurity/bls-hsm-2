@@ -14,6 +14,25 @@
 
 char buffer[2048] = "";
 
+static uint32_t GetFreeMemorySize()
+{
+  uint32_t  i;
+  uint32_t  len;
+  uint8_t*  ptr;
+ 
+  for(i=1;;i++)
+  {
+    len = i * 1024;
+    ptr = (uint8_t*)malloc(len);
+    if(!ptr){
+      break;
+    }
+    free(ptr);
+  }
+ 
+  return i;
+}
+
 void main(void)
 {
 	/*uint8_t digest[32];
@@ -49,9 +68,13 @@ void main(void)
 	pk[96] = '\0';
 	printk("Generated public key 0:\n%s\n", pk);
 
+	// Get Free Memory Size
+	ret = GetFreeMemorySize();
+	printk("Free memory size: %d\n", ret);
+
 	// sign_pk
-	//char msg[] = "5656565656565656565656565656565656565656565656565656565656565656";
-	//signature(pk, msg, buffer);	
+	char msg[] = "5656565656565656565656565656565656565656565656565656565656565656";
+	signature(pk, msg, buffer);	
 	printk("Signature:\n%s\n", buffer);
 	memset(buffer, 0, 2048);
 
