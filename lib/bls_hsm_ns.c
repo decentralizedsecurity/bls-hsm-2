@@ -99,7 +99,6 @@ int keygen(char* data, char* buff){
         #else
         pk_index = tfm_secure_keygen(info, 32);
         #endif
-        return pk_index; // TODO: It should be done at the end of the function
         
         if(pk_index == -KEYSLIMIT){
             strcat(buff, "Can't generate more keys. Limit reached.\n");
@@ -109,17 +108,18 @@ int keygen(char* data, char* buff){
             return pk_index;
         }
         #ifndef TFM
-        /*if(get_key(pk_index, pk) != 0){
+        if(get_key(pk_index, pk) != 0){
             strcat(buff, "get_key: error\n");
             return -3;
-        }*/
+        }
         #else
         if(tfm_get_key(pk_index, pk) != 0){
             strcat(buff, "get_key: error\n");
             return -3;
         }
         #endif
-        print_pk(pk, buff);
+        print_pk(pk, buff);        
+        return pk_index;
         
     }else{
         strcat(buff, "Can't generate more keys. Limit reached.\n");

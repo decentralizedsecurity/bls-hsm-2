@@ -7,9 +7,23 @@
 #include <zephyr.h>
 #include <tfm_veneers.h>
 #include <tfm_ns_interface.h>
+#include <sys/printk.h>
+#include <shell/shell.h>
+#include <version.h>
+#include <logging/log.h>
+#include <stdlib.h>
+#include <kernel.h>
+#include <stdio.h>
+#include <secure_services.h>
+#include <pm_config.h>
+#include <fw_info.h>
+#include <drivers/uart.h>
+#include <cJSON.h>
 #include <string.h>
+#ifdef CONFIG_USB
+#include <usb/usb_device.h>
+#endif
 
-//#include "secure_partition_interface.h"
 #include "bls_hsm_ns.h"
 
 char buffer[2048] = "";
@@ -32,6 +46,90 @@ static uint32_t GetFreeMemorySize()
  
   return i;
 }
+
+LOG_MODULE_REGISTER(app);
+
+static int cmd_keygen(const struct shell *shell, size_t argc, char **argv)
+{
+    if(argc == 1){
+        keygen("", buffer);
+		//printk("Keystore size: %d\n", ret, get_keystore_length()); // MUST BE DELETED
+    }else{
+        keygen(argv[1], buffer);
+    }
+    printf(buffer);
+    memset(buffer, 0, 2048);
+    return 0;
+}
+
+static int cmd_signature_message(const struct shell *shell, size_t argc, char **argv, char* buff)
+{
+    if(signature(argv[1], argv[2], buffer) == 0){
+        printf("Signature: \n");
+        printf("%s%s\n", "0x", buffer);
+    }else{
+        printf(buffer);
+    }
+    memset(buffer, 0, 2048);
+	return 0;
+}
+
+/*static int cmd_signature_verification(const struct shell *shell, size_t argc, char **argv, char* buff)
+{
+    verify(argv[1], argv[2], argv[3], buffer);
+    printf(buffer);
+    memset(buffer, 0, 2048);
+	return 0;
+}*/
+
+/*static int cmd_get_keys(const struct shell *shell, size_t argc, char **argv, char* buff)
+{
+    print_keys_Json(buffer);
+    printf(buffer);
+    memset(buffer, 0, 2048);
+	return 0;
+}*/
+
+static int cmd_reset(const struct shell *shell, size_t argc, char **argv, char* buff){
+    resetc(buffer);
+    printf(buffer);
+    memset(buffer, 0, 2048);
+    return 0;
+}
+
+static int cmd_prompt(const struct shell *shell, size_t argc, char **argv){
+    ARG_UNUSED(argc);
+
+    if(strcmp(argv[1], "on") == 0){
+        shell_prompt_change(shell, "uart:~$ ");
+    }else if(strcmp(argv[1], "off") == 0){
+        shell_prompt_change(shell, "");
+    }else{
+        printf("Usage: prompt on/off\n");
+    }
+    return 0;
+}
+
+/*static int cmd_import(const struct shell *shell, size_t argc, char **argv){
+    import(argv[1], buffer);
+    printf(buffer);
+    memset(buffer, 0, 2048);
+    return 0;
+}*/
+
+SHELL_CMD_ARG_REGISTER(keygen, NULL, "Generates secret key and public key", cmd_keygen, 1, 1);
+
+SHELL_CMD_ARG_REGISTER(signature, NULL, "Signs a message with a specific public key", cmd_signature_message, 3, 0);
+
+//SHELL_CMD_ARG_REGISTER(verify, NULL, "Verifies the signature", cmd_signature_verification, 4, 0);
+
+//SHELL_CMD_ARG_REGISTER(getkeys, NULL, "Returns the identifiers of the keys available to the signer", cmd_get_keys, 1, 0);
+
+SHELL_CMD_ARG_REGISTER(reset, NULL, "Deletes all generated keys", cmd_reset, 1, 0);
+
+SHELL_CMD_ARG_REGISTER(prompt, NULL, "Toggle prompt", cmd_prompt, 2, 0);
+
+//SHELL_CMD_ARG_REGISTER(import, NULL, "Import secret key", cmd_import, 2, 0);
 
 void main(void)
 {
@@ -73,8 +171,8 @@ void main(void)
 	printk("Free memory size: %d\n", ret);
 
 	// sign_pk
-	char msg[] = "5656565656565656565656565656565656565656565656565656565656565656";
-	signature(pk, msg, buffer);	
+	//char msg[] = "5656565656565656565656565656565656565656565656565656565656565656";
+	//signature(pk, msg, buffer);	
 	printk("Signature:\n%s\n", buffer);
 	memset(buffer, 0, 2048);
 

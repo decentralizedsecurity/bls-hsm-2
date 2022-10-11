@@ -99,7 +99,7 @@ int tfm_secure_keygen(char* info, size_t infosize){
 				(uint32_t)in_vec, IOVEC_LEN(in_vec),
 				(uint32_t)out_vec, IOVEC_LEN(out_vec));
 
-	return status;
+	return index; //return status;
 }
 
 int tfm_sign_pk(char* pk, char* msg, char* sign){
