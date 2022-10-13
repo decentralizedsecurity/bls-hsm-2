@@ -103,6 +103,30 @@ psa_status_t tfm_get_keystore_size_req(psa_invec *in_vec, size_t in_len,
 	return PSA_SUCCESS;
 }
 
+static uint32_t GetFreeMemorySize()
+{
+  uint32_t  i;
+  uint32_t  len;
+  uint8_t*  ptr;
+ 
+  for(i=1;;i++)
+  {
+    len = i * 1024;
+    ptr = (uint8_t*)malloc(len);
+    if(!ptr){
+      break;
+    }
+    free(ptr);
+  }
+ 
+  return i;
+}
+
+uint32_t tfm_get_free_memory_size_req(psa_invec *in_vec, size_t in_len,
+				      psa_outvec *out_vec, size_t size_len){
+	return GetFreeMemorySize();
+}
+
 psa_status_t tfm_secure_keygen_req(psa_invec *in_vec, size_t in_len,
 				      psa_outvec *out_vec, size_t size_len){
 	uint32_t index = secure_keygen(in_vec[0].base);

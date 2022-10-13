@@ -168,11 +168,13 @@ void main(void)
 
 	// Get Free Memory Size
 	ret = GetFreeMemorySize();
-	printk("Free memory size: %d\n", ret);
+	printk("Free memory size (main.c): %d\n", ret);
+	ret = tfm_get_free_memory_size();
+	printk("Free memory size (from secure partition): %d\n", ret);
 
 	// sign_pk
-	char msg[] = "5656565656565656565656565656565656565656565656565656565656565656";
-	signature(pk, msg, buffer);	
+	//char msg[] = "5656565656565656565656565656565656565656565656565656565656565656";
+	//signature(pk, msg, buffer);	
 	printk("Signature:\n%s\n", buffer);
 	memset(buffer, 0, 2048);
 

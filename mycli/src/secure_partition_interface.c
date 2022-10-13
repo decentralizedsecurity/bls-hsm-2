@@ -45,6 +45,15 @@ int tfm_get_keystore_size(){
 	return size;
 }
 
+int tfm_get_free_memory_size(){
+	uint32_t size = tfm_ns_interface_dispatch(
+				(veneer_fn)tfm_get_free_memory_size_req_veneer,
+				(uint32_t) NULL, 0,
+				(uint32_t) NULL, 0);
+
+	return size;
+}
+
 int tfm_store_pk(char* public_key_hex){
 	return 0;
 }
