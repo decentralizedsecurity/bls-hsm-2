@@ -7,6 +7,7 @@
 #include <psa/crypto.h>
 #include <stdbool.h>
 #include <stdint.h>
+//#include <sys/printk.h>
 #include "tfm_secure_api.h"
 #include "tfm_api.h"
 
@@ -117,6 +118,7 @@ static uint32_t GetFreeMemorySize()
       break;
     }
     free(ptr);
+	printf("GetFreeMemorySize (from TF-M) -> i = %d\n", i);
   }
  
   return i;
@@ -124,6 +126,7 @@ static uint32_t GetFreeMemorySize()
 
 uint32_t tfm_get_free_memory_size_req(psa_invec *in_vec, size_t in_len,
 				      psa_outvec *out_vec, size_t size_len){
+	printf("Executing GetFreeMemorySize from TF-M\n");
 	return GetFreeMemorySize();
 }
 

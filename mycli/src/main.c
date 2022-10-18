@@ -167,10 +167,10 @@ void main(void)
 	printk("Generated public key 0:\n%s\n", pk);
 
 	// Get Free Memory Size
-	ret = GetFreeMemorySize();
-	printk("Free memory size (main.c): %d\n", ret);
-	ret = tfm_get_free_memory_size();
-	printk("Free memory size (from secure partition): %d\n", ret);
+	//ret = GetFreeMemorySize();
+	//printk("Free memory size (main.c): %d\n", ret);
+	//ret = tfm_get_free_memory_size();
+	//printk("Free memory size (from secure partition): %d\n", ret);
 
 	// sign_pk
 	//char msg[] = "5656565656565656565656565656565656565656565656565656565656565656";
