@@ -54,3 +54,28 @@ target_include_directories(app PRIVATE
 target_compile_definitions(app
     PRIVATE TFM_PARTITION_DUMMY_PARTITION
 )
+
+# To see type of fatal error in the log 
+set_property(
+TARGET zephyr_property_target
+APPEND PROPERTY TFM_CMAKE_OPTIONS
+
+# Use -O0. So GDB reports correct line numbers.
+-DCMAKE_BUILD_TYPE=Debug
+
+# Halt instead of rebooting on internal TF-M faults.
+-DTFM_HALT_ON_CORE_PANIC=ON
+
+# NB: Probably not enough MPU regions on nrf53 in Isolation level 2
+-DNULL_POINTER_EXCEPTION_DETECTION=ON
+
+# Add a debug function that logs the memory protection config, and
+# then invoke it from the SPE with log_memory_protection() to see
+# the memory protection configuration.
+-DLOG_MEMORY_PROTECTION=ON
+
+# WDT will force tests to continue for certain types of TF-M
+# tests. This can be inconvenient when debugging. But the WDT can
+# also be a necessary part of the test execution.
+# -DWATCHDOG_AVAILABLE=0
+)
