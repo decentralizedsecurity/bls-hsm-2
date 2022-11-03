@@ -79,7 +79,7 @@ int tfm_get_key(uint32_t index, char* public_key_hex){
 int tfm_get_keys(char public_keys_hex_store_ns[10][96]){
 	psa_status_t status;
 
-	psa_invec out_vec[] = {
+	psa_outvec out_vec[] = {
 		{ .base = public_keys_hex_store_ns, .len = sizeof(char)*1*96 },
 	};
 
@@ -99,7 +99,7 @@ int tfm_secure_keygen(char* info, size_t infosize){
 		{ .base = info, .len = infosize }
 	};
 
-	psa_invec out_vec[] = {
+	psa_outvec out_vec[] = {
 		{ .base = &index, .len = sizeof(index) },
 	};
 
@@ -119,8 +119,8 @@ int tfm_sign_pk(char* pk, char* msg, char* sign){
 		{ .base = msg, .len = /*sizeof(msg)*/65 }/**/
 	};
 
-	psa_invec out_vec[] = {
-		{ .base = &sign, .len = /*sizeof(sign)*/97 },
+	psa_outvec out_vec[] = {
+		{ .base = sign, .len = /*sizeof(sign)*/193 },
 	};
 
 	status = tfm_ns_interface_dispatch(
@@ -128,10 +128,10 @@ int tfm_sign_pk(char* pk, char* msg, char* sign){
 				(uint32_t)in_vec, IOVEC_LEN(in_vec),
 				(uint32_t)out_vec, IOVEC_LEN(out_vec));
 
-	/*printk("(tfm_sign_pk) pk: %s\n", pk);
+	printk("(tfm_sign_pk) pk: %s\n", pk);
 	printk("(tfm_sign_pk) msg: %s\n", msg);
 	printk("(tfm_sign_pk) sign: %s\n", sign);
-	printk("(tfm_sign_pk) ret: %d\n", status);*/
+	printk("(tfm_sign_pk) ret: %d\n", status);
 
 	return status;
 }
@@ -141,12 +141,12 @@ int tfm_verify_sign(char* pk, char* msg, char* sig){
 	uint32_t ret;
 
 	psa_invec in_vec[] = {
-		{ .base = pk, .len = /*sizeof(pk)*/97 },
-		{ .base = msg, .len = /*sizeof(msg)*/65 },
-		{ .base = sig, .len = /*sizeof(msg)*/97 }
+		{ .base = pk, .len = /*sizeof(pk)*/96 },
+		{ .base = msg, .len = /*sizeof(msg)*/64 },
+		{ .base = sig, .len = /*sizeof(msg)*/192 }
 	};
 
-	psa_invec out_vec[] = {
+	psa_outvec out_vec[] = {
 		{ .base = &ret, .len = sizeof(ret) },
 	};
 

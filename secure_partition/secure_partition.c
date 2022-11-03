@@ -140,11 +140,11 @@ psa_status_t tfm_secure_keygen_req(psa_invec *in_vec, size_t in_len,
 psa_status_t tfm_sign_pk_req(psa_invec *in_vec, size_t in_len,
 				      psa_outvec *out_vec, size_t size_len){
 	//int ret = sign_pk(in_vec[0].base, in_vec[1].base, (void*) out_vec[0].base);
-	const char* pk = in_vec[0].base;
-	const char* msg = in_vec[1].base;
-	char* sign = (void*) out_vec[0].base;
-	int ret = sign_pk(pk, msg, sign);
-
+	//const char* pk = in_vec[0].base;
+	//const char* msg = in_vec[1].base;
+	char sign[193] = "";
+	int ret = sign_pk(in_vec[0].base, in_vec[1].base, sign);
+	tfm_memcpy((void*)out_vec[0].base, sign, out_vec[0].len);
 	return ret;
 }
 
