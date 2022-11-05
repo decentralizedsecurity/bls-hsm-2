@@ -197,15 +197,24 @@ int get_pk(int index, char* pk_hex){
 Get array of stored public keys in buffer 'buff'
 */
 int print_keys_Json(char* buff){
+    #ifndef TFM
     int keystore_size = get_keystore_size();
+    #else
+    int keystore_size = tfm_get_keystore_size();
+    printf("keystore length: %d\n", keystore_size);
+    #endif
+
     char public_keys_hex_store[keystore_size][96];
     #ifndef TFM
     get_keys(public_keys_hex_store);
     #else
-    tfm_get_keys(public_keys_hex_store);
+    //tfm_get_keys(public_keys_hex_store);
+    for(int i = 0; i < keystore_size; i++){
+        tfm_get_key(i, public_keys_hex_store[i]);
+    }
     #endif
     //printk("print_keys_Json: %.96s\n", public_keys_hex_store);
-    /*
+    
         strcat(buff, "{\"keys\":[\"");
         for(int i = 0; i < keystore_size; i++){
             for(int j = 0; j < 96; j++){
@@ -218,7 +227,7 @@ int print_keys_Json(char* buff){
         
         }
         strcat(buff, "\"]}\n");
-        */       
+              
     return keystore_size;
 }
 
