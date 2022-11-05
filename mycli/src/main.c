@@ -166,6 +166,12 @@ void main(void)
 	pk[96] = '\0';
 	printk("Generated public key 0:\n%s\n", pk);
 
+	// get_keys
+	int num = print_keys_Json(buffer);
+	printk("There are %d keys inside keystore\n", num);
+    printk("Print keys Json: %s\n", buffer);
+    memset(buffer, 0, 2048);
+
 	// Get Free Memory Size
 	//ret = GetFreeMemorySize();
 	//printk("Free memory size (main.c): %d\n", ret);
@@ -185,6 +191,19 @@ void main(void)
 		buffer);
 	printk("verify: %d\n", ret);
 	printk("buffer: %s\n", buffer);*/
+
+	// Another keygen
+	printk("Let's do another keygen...\n");
+	ret = keygen("", buffer);
+	printk("Generated new pair of keys. Index = %d\n", ret);
+	printk("Keystore size: %d\n", get_keystore_length()); // MUST BE DELETED
+	memset(buffer, 0, 2048);
+
+	// get_keys
+	num = print_keys_Json(buffer);
+	printk("There are %d keys inside keystore\n", num);
+    printk("Print keys Json: %s\n", buffer);
+    memset(buffer, 0, 2048);
 
 	// reset
 	resetc(buffer);
