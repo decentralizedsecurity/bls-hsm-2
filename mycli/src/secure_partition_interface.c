@@ -128,10 +128,10 @@ int tfm_sign_pk(char* pk, char* msg, char* sign){
 				(uint32_t)in_vec, IOVEC_LEN(in_vec),
 				(uint32_t)out_vec, IOVEC_LEN(out_vec));
 
-	printk("(tfm_sign_pk) pk: %s\n", pk);
+	/*printk("(tfm_sign_pk) pk: %s\n", pk);
 	printk("(tfm_sign_pk) msg: %s\n", msg);
 	printk("(tfm_sign_pk) sign: %s\n", sign);
-	printk("(tfm_sign_pk) ret: %d\n", status);
+	printk("(tfm_sign_pk) ret: %d\n", status);*/
 
 	return status;
 }
